@@ -9,6 +9,17 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 
+add_executable(sensor_msgs_msg_laser_scan_tcp_server src/nodes/sensor_msgs/msg/laser_scan/tcp/server.cpp)
+ament_target_dependencies(sensor_msgs_msg_laser_scan_tcp_server
+  rclcpp
+  std_msgs
+)
+
+install(
+  TARGETS sensor_msgs_msg_laser_scan_tcp_server
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   set(ament_cmake_copyright_FOUND TRUE)
