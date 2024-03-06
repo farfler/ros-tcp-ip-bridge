@@ -9,15 +9,35 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 
+set(SOCKETS_SRC
+  src/sockets/tcp/client.cpp
+  src/sockets/tcp/server.cpp
+  src/sockets/tcp/session.cpp
+  src/sockets/udp/broadcaster.cpp
+  src/sockets/udp/listener.cpp
+  src/sockets/address.cpp
+  src/sockets/receiver.cpp
+  src/sockets/sender.cpp
+  src/sockets/socket.cpp
+)
+
+add_library(${PROJECT_NAME} SHARED ${SOCKETS_SRC})
+target_include_directories(${PROJECT_NAME} PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
 add_executable(sensor_msgs_msg_laser_scan_tcp_server src/nodes/sensor_msgs/msg/laser_scan/tcp/server.cpp)
 ament_target_dependencies(sensor_msgs_msg_laser_scan_tcp_server
   rclcpp
   std_msgs
 )
 
-install(
-  TARGETS sensor_msgs_msg_laser_scan_tcp_server
-  DESTINATION lib/${PROJECT_NAME}
+install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
+install(TARGETS ${PROJECT_NAME} sensor_msgs_msg_laser_scan_tcp_server
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
 )
 
 if(BUILD_TESTING)
