@@ -27,14 +27,28 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<INSTALL_INTERFACE:include>
 )
 
-add_executable(sensor_msgs_msg_laser_scan_tcp_server src/nodes/sensor_msgs/msg/laser_scan/tcp/server.cpp)
-ament_target_dependencies(sensor_msgs_msg_laser_scan_tcp_server
-  rclcpp
-  std_msgs
-)
+set(NODES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/nodes)
+
+file(GLOB_RECURSE NODES_SRC ${NODES_DIR}/*.cpp)
+foreach(NODE_SRC ${NODES_SRC})
+  file(RELATIVE_PATH RELATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src/nodes ${NODE_SRC})
+  string(REPLACE ".cpp" "" RELATIVE_PATH ${RELATIVE_PATH})
+  string(REPLACE "/" "_" EXECUTABLE_NAME ${RELATIVE_PATH})
+
+  add_executable(${EXECUTABLE_NAME} ${NODE_SRC})
+  ament_target_dependencies(${EXECUTABLE_NAME}
+    rclcpp
+    std_msgs
+  )
+  target_link_libraries(${EXECUTABLE_NAME} ${PROJECT_NAME})
+
+  install(TARGETS ${EXECUTABLE_NAME}
+    DESTINATION lib/${PROJECT_NAME}
+  )
+endforeach()
 
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
-install(TARGETS ${PROJECT_NAME} sensor_msgs_msg_laser_scan_tcp_server
+install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
