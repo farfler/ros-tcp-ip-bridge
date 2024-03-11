@@ -9,19 +9,12 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 
-set(SOCKETS_SRC
-  src/sockets/tcp/client.cpp
-  src/sockets/tcp/server.cpp
-  src/sockets/tcp/session.cpp
-  src/sockets/udp/broadcaster.cpp
-  src/sockets/udp/listener.cpp
-  src/sockets/address.cpp
-  src/sockets/receiver.cpp
-  src/sockets/sender.cpp
-  src/sockets/socket.cpp
+file(GLOB_RECURSE LIBRARY_SRC 
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/sockets/*.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/msgs/*.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED ${SOCKETS_SRC})
+add_library(${PROJECT_NAME} SHARED ${LIBRARY_SRC})
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
