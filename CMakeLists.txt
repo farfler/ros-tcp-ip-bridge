@@ -8,6 +8,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 file(GLOB_RECURSE LIBRARY_SRC 
   ${CMAKE_CURRENT_SOURCE_DIR}/src/sockets/*.cpp
@@ -32,6 +33,7 @@ foreach(NODE_SRC ${NODES_SRC})
   ament_target_dependencies(${EXECUTABLE_NAME}
     rclcpp
     std_msgs
+    sensor_msgs
   )
   target_link_libraries(${EXECUTABLE_NAME} ${PROJECT_NAME})
 
