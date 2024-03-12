@@ -28,7 +28,7 @@ public:
 
             receive_thread_ = std::thread(&SensorMsgsMsgLaserScanTCPServer::receive_thread, this);
 
-            RCLCPP_INFO(this->get_logger(), "Receiving messages from clients on port %d to topic '%s'", port_, publisher_topic_.c_str());
+            RCLCPP_INFO(this->get_logger(), "Forwarding messages from clients on port '%d' to topic '%s'", port_, publisher_topic_.c_str());
         }
 
         if (!subscription_topic_.empty())
@@ -36,7 +36,7 @@ public:
             subscription_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
                 subscription_topic_, 10, std::bind(&SensorMsgsMsgLaserScanTCPServer::subscription_callback, this, std::placeholders::_1));
 
-            RCLCPP_INFO(this->get_logger(), "Forwarding messages from topic '%s' to clients on port %d", subscription_topic_.c_str(), port_);
+            RCLCPP_INFO(this->get_logger(), "Forwarding messages from topic '%s' to clients on port '%d'", subscription_topic_.c_str(), port_);
         }
 
         accept_thread_ = std::thread(&SensorMsgsMsgLaserScanTCPServer::accept_thread, this);
