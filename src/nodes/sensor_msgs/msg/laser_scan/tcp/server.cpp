@@ -78,7 +78,7 @@ private:
                         continue;
                     }
 
-                    size_t packet_size = ntohl(packet_size_net.value());
+                    uint32_t packet_size = ntohl(packet_size_net.value());
 
                     auto buffer = std::make_unique<char[]>(packet_size);
                     session->receive_raw(buffer.get(), packet_size);
@@ -135,7 +135,7 @@ private:
                 std::vector<char> vector;
                 tcp_ip_bridge::serialize_sensor_msgs_msg_laser_scan(packet, vector);
 
-                size_t packet_size = vector.size();
+                uint32_t packet_size = static_cast<uint32_t>(vector.size());
                 uint32_t packet_size_net = htonl(packet_size);
 
                 vector.insert(vector.begin(), reinterpret_cast<char *>(&packet_size_net), reinterpret_cast<char *>(&packet_size_net) + sizeof(packet_size_net));
