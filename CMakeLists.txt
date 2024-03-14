@@ -11,6 +11,43 @@ find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
+file(GLOB_RECURSE TCP_IP_BRIDGE_LIB
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/msgs/*.cpp
+)
+file(GLOB_RECURSE TCP_IP_BRIDGE_NODES_SRC
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/nodes/*.cpp
+)
+
+add_library(${PROJECT_NAME} SHARED ${TCP_IP_BRIDGE_LIB})
+target_include_directories(${PROJECT_NAME} PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
+foreach(TCP_IP_BRIDGE_NODE ${TCP_IP_BRIDGE_NODES_SRC})
+  file(RELATIVE_PATH RELATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src/nodes ${TCP_IP_BRIDGE_NODE})
+  string(REPLACE ".cpp" "" RELATIVE_PATH ${RELATIVE_PATH})
+  string(REPLACE "/" "_" EXECUTABLE_NAME ${RELATIVE_PATH})
+
+  add_executable(${EXECUTABLE_NAME} ${TCP_IP_BRIDGE_NODE})
+  ament_target_dependencies(${EXECUTABLE_NAME}
+    rclcpp
+    std_msgs
+    sensor_msgs
+    geometry_msgs
+  )
+
+  target_link_libraries(${EXECUTABLE_NAME} ${PROJECT_NAME})
+  install(TARGETS ${EXECUTABLE_NAME} DESTINATION lib/${PROJECT_NAME})
+endforeach()
+
+install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
+install(TARGETS ${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   set(ament_cmake_copyright_FOUND TRUE)
