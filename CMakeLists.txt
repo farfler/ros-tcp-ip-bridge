@@ -10,6 +10,7 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(builtin_interfaces REQUIRED)
 
 file(GLOB_RECURSE TCP_IP_BRIDGE_LIB
   ${CMAKE_CURRENT_SOURCE_DIR}/src/msgs/*.cpp
@@ -24,6 +25,7 @@ ament_target_dependencies(${PROJECT_NAME}
   std_msgs
   sensor_msgs
   geometry_msgs
+  builtin_interfaces
 )
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
