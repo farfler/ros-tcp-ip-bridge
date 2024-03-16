@@ -27,7 +27,7 @@ public:
 
         auto resolver = boost::asio::ip::tcp::resolver(io_context_);
         auto endpoints = resolver.resolve(ip_, std::to_string(port_));
-        boost::asio::connect(*socket_, endpoints);
+        boost::asio::connect(socket_, endpoints);
 
         if (!publisher_topic_.empty())
         {
@@ -63,8 +63,8 @@ private:
             auto packet_buffer = SensorMsgsMsgLaserScan::serialize(msg);
             uint32_t packet_size = htonl(static_cast<uint32_t>(packet_buffer.size()));
 
-            boost::asio::write(*socket_, boost::asio::buffer(&packet_size, sizeof(packet_size)));
-            boost::asio::write(*socket_, boost::asio::buffer(packet_buffer));
+            boost::asio::write(socket_, boost::asio::buffer(&packet_size, sizeof(packet_size)));
+            boost::asio::write(socket_, boost::asio::buffer(packet_buffer));
         }
         catch (const boost::system::system_error &e)
         {
@@ -93,13 +93,12 @@ private:
             {
                 uint32_t packet_size;
                 std::vector<char> packet_size_buffer(sizeof(uint32_t));
-                boost::asio::read(*socket_, boost::asio::buffer(packet_size_buffer));
-
+                boost::asio::read(socket_, boost::asio::buffer(packet_size_buffer));
                 std::memcpy(&packet_size, packet_size_buffer.data(), sizeof(packet_size));
                 packet_size = ntohl(packet_size);
 
                 std::vector<char> packet_buffer(packet_size);
-                boost::asio::read(*socket_, boost::asio::buffer(packet_buffer, packet_size));
+                boost::asio::read(socket_, boost::asio::buffer(packet_buffer, packet_size));
 
                 auto msg = SensorMsgsMsgLaserScan::deserialize(packet_buffer);
                 publisher_->publish(msg);
@@ -130,7 +129,7 @@ private:
     std::string subscription_topic_;
 
     boost::asio::io_context io_context_ = boost::asio::io_context();
-    std::shared_ptr<boost::asio::ip::tcp::socket> socket_ = std::make_shared<boost::asio::ip::tcp::socket>(io_context_);
+    boost::asio::ip::tcp::socket socket_ = boost::asio::ip::tcp::socket(io_context_);
 
     std::shared_ptr<rclcpp::Subscription<sensor_msgs::msg::LaserScan>> subscription_;
     std::shared_ptr<rclcpp::Publisher<sensor_msgs::msg::LaserScan>> publisher_;
