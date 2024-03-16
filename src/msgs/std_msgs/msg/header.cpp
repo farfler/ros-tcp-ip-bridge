@@ -58,7 +58,6 @@ namespace tcp_ip_bridge
         header_frame_id_size = ntohl(header_frame_id_size);
 
         RCLCPP_DEBUG(rclcpp::get_logger("std_msgs_msg_header::deserialize"), "Deserialized 'header_frame_id_size': %u", header_frame_id_size);
-        RCLCPP_DEBUG(rclcpp::get_logger("std_msgs_msg_header::deserialize"), "Packet size: %u", packet.size());
 
         if (header_frame_id_size > 0)
         {

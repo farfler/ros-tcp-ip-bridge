@@ -46,13 +46,11 @@ namespace tcp_ip_bridge
         packet.erase(packet.begin(), packet.begin() + sizeof(msg.sec));
 
         RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_laser_scan::deserialize"), "Deserialized 'header_stamp_sec': %u", msg.sec);
-        RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_laser_scan::deserialize"), "Packet size: %u", packet.size());
 
         memcpy(&msg.nanosec, packet.data(), sizeof(msg.nanosec));
         packet.erase(packet.begin(), packet.begin() + sizeof(msg.nanosec));
 
         RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_laser_scan::deserialize"), "Deserialized 'header_stamp_nanosec': %u", msg.nanosec);
-        RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_laser_scan::deserialize"), "Packet size: %u", packet.size());
 
         return msg;
     }
