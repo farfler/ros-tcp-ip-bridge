@@ -1,6 +1,6 @@
-#include <vector>
-#include <iostream>
-#include <cstring>
+#include <vector> // std::vector
+
+#include "sensor_msgs/msg/laser_scan.hpp" // sensor_msgs::msg::LaserScan
 
 namespace tcp_ip_bridge
 {
@@ -9,7 +9,9 @@ namespace tcp_ip_bridge
     {
     public:
         static std::vector<char> serialize(const std::shared_ptr<sensor_msgs::msg::LaserScan> &msg);
-        static sensor_msgs::msg::LaserScan deserialize(const std::vector<char> &packet);
+        static std::vector<char> serialize(const std::shared_ptr<sensor_msgs::msg::LaserScan> &msg, std::vector<char> &packet);
+        static sensor_msgs::msg::LaserScan deserialize(std::vector<char> &packet);
+        static sensor_msgs::msg::LaserScan deserialize(std::vector<char> &packet, sensor_msgs::msg::LaserScan &msg);
     };
 
 } // namespace tcp_ip_bridge
