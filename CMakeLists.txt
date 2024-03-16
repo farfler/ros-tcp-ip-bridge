@@ -9,6 +9,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(builtin_interfaces REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 file(GLOB_RECURSE TCP_IP_BRIDGE_LIB
   ${CMAKE_CURRENT_SOURCE_DIR}/src/msgs/*.cpp
@@ -23,6 +24,7 @@ ament_target_dependencies(${PROJECT_NAME}
   rclcpp
   builtin_interfaces
   std_msgs
+  geometry_msgs
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
@@ -40,6 +42,7 @@ foreach(TCP_IP_BRIDGE_NODE ${TCP_IP_BRIDGE_NODES})
     rclcpp
     builtin_interfaces
     std_msgs
+    geometry_msgs
   )
 
   target_link_libraries(${EXECUTABLE_NAME} ${PROJECT_NAME})
