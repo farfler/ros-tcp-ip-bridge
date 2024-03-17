@@ -1,0 +1,49 @@
+#include <vector>  // std::vector
+#include <cstring> // memcpy
+
+#include "rclcpp/rclcpp.hpp"           // RCLCPP_DEBUG
+#include "geometry_msgs/msg/accel.hpp" // geometry_msgs::msg::Accel
+
+#include "tcp_ip_bridge/msgs/geometry_msgs/msg/accel.hpp"   // GeometryMsgsMsgAccel
+#include "tcp_ip_bridge/msgs/geometry_msgs/msg/vector3.hpp" // GeometryMsgsMsgVector3
+
+namespace tcp_ip_bridge
+{
+
+    std::vector<char> GeometryMsgsMsgAccel::serialize(const std::shared_ptr<geometry_msgs::msg::Accel> &msg)
+    {
+        std::vector<char> packet;
+
+        GeometryMsgsMsgAccel::serialize(msg, packet);
+
+        return packet;
+    }
+
+    std::vector<char> GeometryMsgsMsgAccel::serialize(const std::shared_ptr<geometry_msgs::msg::Accel> &msg, std::vector<char> &packet)
+    {
+        GeometryMsgsMsgVector3::serialize(std::make_shared<geometry_msgs::msg::Vector3>(msg->linear), packet);
+
+        GeometryMsgsMsgVector3::serialize(std::make_shared<geometry_msgs::msg::Vector3>(msg->angular), packet);
+
+        return packet;
+    }
+
+    geometry_msgs::msg::Accel GeometryMsgsMsgAccel::deserialize(std::vector<char> &packet)
+    {
+        geometry_msgs::msg::Accel msg;
+
+        GeometryMsgsMsgAccel::deserialize(packet, msg);
+
+        return msg;
+    }
+
+    geometry_msgs::msg::Accel GeometryMsgsMsgAccel::deserialize(std::vector<char> &packet, geometry_msgs::msg::Accel &msg)
+    {
+        GeometryMsgsMsgVector3::deserialize(packet, msg.linear);
+
+        GeometryMsgsMsgVector3::deserialize(packet, msg.angular);
+
+        return msg;
+    }
+
+} // namespace tcp_ip_bridge
