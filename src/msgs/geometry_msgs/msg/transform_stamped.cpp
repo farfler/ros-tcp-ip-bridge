@@ -28,13 +28,13 @@ namespace tcp_ip_bridge
         uint32_t child_frame_id_size = htonl(static_cast<uint32_t>(msg->child_frame_id.size()));
         packet.insert(packet.end(), reinterpret_cast<const char *>(&child_frame_id_size), reinterpret_cast<const char *>(&child_frame_id_size) + sizeof(child_frame_id_size));
 
-        RCLCPP_DEBUG(rclcpp::get_logger("std_msgs_msg_header::serialize"), "child_frame_id_size: %d", ntohl(child_frame_id_size));
+        RCLCPP_DEBUG(rclcpp::get_logger("geometry_msgs_msg_transform_stamped::serialize"), "child_frame_id_size: %u", ntohl(child_frame_id_size));
 
         if (msg->child_frame_id.size() > 0)
         {
-            packet.insert(packet.end(), msg->child_frame_id.data(), msg->child_frame_id.data() + msg->child_frame_id.size());
+            packet.insert(packet.end(), msg->child_frame_id.begin(), msg->child_frame_id.end());
 
-            RCLCPP_DEBUG(rclcpp::get_logger("std_msgs_msg_header::serialize"), "child_frame_id: %s", msg->child_frame_id.c_str());
+            RCLCPP_DEBUG(rclcpp::get_logger("geometry_msgs_msg_transform_stamped::serialize"), "child_frame_id: %s", msg->child_frame_id.c_str());
         }
 
         GeometryMsgsMsgTransform::serialize(std::make_shared<geometry_msgs::msg::Transform>(msg->transform), packet);
@@ -60,15 +60,15 @@ namespace tcp_ip_bridge
         packet.erase(packet.begin(), packet.begin() + sizeof(child_frame_id_size));
         child_frame_id_size = ntohl(child_frame_id_size);
 
-        RCLCPP_DEBUG(rclcpp::get_logger("std_msgs_msg_header::deserialize"), "child_frame_id_size: %d", child_frame_id_size);
+        RCLCPP_DEBUG(rclcpp::get_logger("geometry_msgs_msg_transform_stamped::deserialize"), "child_frame_id_size: %u", child_frame_id_size);
 
         if (child_frame_id_size > 0)
         {
             msg.child_frame_id.resize(child_frame_id_size);
-            memcpy(msg.child_frame_id.data(), packet.data(), child_frame_id_size * sizeof(char));
-            packet.erase(packet.begin(), packet.begin() + child_frame_id_size * sizeof(char));
+            memcpy(msg.child_frame_id.data(), packet.data(), child_frame_id_size);
+            packet.erase(packet.begin(), packet.begin() + child_frame_id_size);
 
-            RCLCPP_DEBUG(rclcpp::get_logger("std_msgs_msg_header::deserialize"), "child_frame_id: %s", msg.child_frame_id.c_str());
+            RCLCPP_DEBUG(rclcpp::get_logger("geometry_msgs_msg_transform_stamped::deserialize"), "child_frame_id: %s", msg.child_frame_id.c_str());
         }
 
         GeometryMsgsMsgTransform::deserialize(packet, msg.transform);

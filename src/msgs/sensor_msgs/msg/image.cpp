@@ -39,7 +39,7 @@ namespace tcp_ip_bridge
 
         if (msg->encoding.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->encoding.data()), reinterpret_cast<const char *>(msg->encoding.data() + msg->encoding.size()));
+            packet.insert(packet.end(), msg->encoding.begin(), msg->encoding.end());
 
             RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_image::serialize"), "encoding: %s", msg->encoding.c_str());
         }
@@ -59,7 +59,7 @@ namespace tcp_ip_bridge
 
         if (msg->data.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->data.data()), reinterpret_cast<const char *>(msg->data.data() + msg->data.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->data.data()), reinterpret_cast<const char *>(msg->data.data() + msg->data.size() * sizeof(char)));
         }
 
         return packet;
@@ -98,8 +98,8 @@ namespace tcp_ip_bridge
         if (encoding_size > 0)
         {
             msg.encoding.resize(encoding_size);
-            memcpy(msg.encoding.data(), packet.data(), encoding_size * sizeof(char));
-            packet.erase(packet.begin(), packet.begin() + encoding_size * sizeof(char));
+            memcpy(msg.encoding.data(), packet.data(), encoding_size);
+            packet.erase(packet.begin(), packet.begin() + encoding_size);
 
             RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_image::deserialize"), "encoding: %s", msg.encoding.c_str());
         }

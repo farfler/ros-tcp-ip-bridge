@@ -39,7 +39,7 @@ namespace tcp_ip_bridge
 
         if (msg->fields.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->fields.data()), reinterpret_cast<const char *>(msg->fields.data() + msg->fields.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->fields.data()), reinterpret_cast<const char *>(msg->fields.data() + msg->fields.size() * sizeof(sensor_msgs::msg::PointField)));
         }
 
         packet.insert(packet.end(), reinterpret_cast<const char *>(&msg->is_bigendian), reinterpret_cast<const char *>(&msg->is_bigendian) + sizeof(msg->is_bigendian));
@@ -61,7 +61,7 @@ namespace tcp_ip_bridge
 
         if (msg->data.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->data.data()), reinterpret_cast<const char *>(msg->data.data() + msg->data.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->data.data()), reinterpret_cast<const char *>(msg->data.data() + msg->data.size() * sizeof(char)));
         }
 
         packet.insert(packet.end(), reinterpret_cast<const char *>(&msg->is_dense), reinterpret_cast<const char *>(&msg->is_dense) + sizeof(msg->is_dense));
@@ -104,8 +104,8 @@ namespace tcp_ip_bridge
         if (fields_size > 0)
         {
             msg.fields.resize(fields_size);
-            memcpy(msg.fields.data(), packet.data(), fields_size * sizeof(char));
-            packet.erase(packet.begin(), packet.begin() + fields_size * sizeof(char));
+            memcpy(msg.fields.data(), packet.data(), fields_size * sizeof(sensor_msgs::msg::PointField));
+            packet.erase(packet.begin(), packet.begin() + fields_size * sizeof(sensor_msgs::msg::PointField));
         }
 
         memcpy(&msg.is_bigendian, packet.data(), sizeof(msg.is_bigendian));

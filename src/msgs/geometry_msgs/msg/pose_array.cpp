@@ -31,7 +31,7 @@ namespace tcp_ip_bridge
 
         if (msg->poses.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->poses.data()), reinterpret_cast<const char *>(msg->poses.data() + msg->poses.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->poses.data()), reinterpret_cast<const char *>(msg->poses.data() + msg->poses.size() * sizeof(geometry_msgs::msg::Pose)));
         }
 
         return packet;

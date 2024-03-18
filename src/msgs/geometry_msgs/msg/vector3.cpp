@@ -47,18 +47,17 @@ namespace tcp_ip_bridge
     geometry_msgs::msg::Vector3 GeometryMsgsMsgVector3::deserialize(std::vector<char> &packet, geometry_msgs::msg::Vector3 &msg)
     {
         memcpy(&msg.x, packet.data(), sizeof(msg.x));
+        packet.erase(packet.begin(), packet.begin() + sizeof(msg.x));
 
         RCLCPP_DEBUG(rclcpp::get_logger("geometry_msgs_msg_vector3::deserialize"), "x: %f", msg.x);
 
-        packet.erase(packet.begin(), packet.begin() + sizeof(msg.x));
-
         memcpy(&msg.y, packet.data(), sizeof(msg.y));
+        packet.erase(packet.begin(), packet.begin() + sizeof(msg.y));
 
         RCLCPP_DEBUG(rclcpp::get_logger("geometry_msgs_msg_vector3::deserialize"), "y: %f", msg.y);
 
-        packet.erase(packet.begin(), packet.begin() + sizeof(msg.y));
-
         memcpy(&msg.z, packet.data(), sizeof(msg.z));
+        packet.erase(packet.begin(), packet.begin() + sizeof(msg.z));
 
         RCLCPP_DEBUG(rclcpp::get_logger("geometry_msgs_msg_vector3::deserialize"), "z: %f", msg.z);
 

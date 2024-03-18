@@ -59,7 +59,7 @@ namespace tcp_ip_bridge
 
         if (msg->ranges.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->ranges.data()), reinterpret_cast<const char *>(msg->ranges.data() + msg->ranges.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->ranges.data()), reinterpret_cast<const char *>(msg->ranges.data() + msg->ranges.size() * sizeof(sensor_msgs::msg::LaserEcho)));
         }
 
         uint32_t intensities_size = htonl(static_cast<uint32_t>(msg->intensities.size()));
@@ -69,7 +69,7 @@ namespace tcp_ip_bridge
 
         if (msg->intensities.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->intensities.data()), reinterpret_cast<const char *>(msg->intensities.data() + msg->intensities.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->intensities.data()), reinterpret_cast<const char *>(msg->intensities.data() + msg->intensities.size() * sizeof(sensor_msgs::msg::LaserEcho)));
         }
 
         return packet;

@@ -40,7 +40,7 @@ namespace tcp_ip_bridge
 
         if (msg->distortion_model.size() > 0)
         {
-            packet.insert(packet.end(), msg->distortion_model.data(), msg->distortion_model.data() + msg->distortion_model.size());
+            packet.insert(packet.end(), msg->distortion_model.begin(), msg->distortion_model.end());
 
             RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_camera_info::serialize"), "distortion_model: %s", msg->distortion_model.c_str());
         }
@@ -52,7 +52,7 @@ namespace tcp_ip_bridge
 
         if (msg->d.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->d.data()), reinterpret_cast<const char *>(msg->d.data() + msg->d.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->d.data()), reinterpret_cast<const char *>(msg->d.data() + msg->d.size() * sizeof(double)));
         }
 
         packet.insert(packet.end(), reinterpret_cast<const char *>(msg->k.data()), reinterpret_cast<const char *>(msg->k.data() + msg->k.size()));
@@ -107,8 +107,8 @@ namespace tcp_ip_bridge
         if (distortion_model_size > 0)
         {
             msg.distortion_model.resize(distortion_model_size);
-            memcpy(msg.distortion_model.data(), packet.data(), distortion_model_size * sizeof(char));
-            packet.erase(packet.begin(), packet.begin() + distortion_model_size * sizeof(char));
+            memcpy(msg.distortion_model.data(), packet.data(), distortion_model_size);
+            packet.erase(packet.begin(), packet.begin() + distortion_model_size);
         }
 
         uint32_t d_size;

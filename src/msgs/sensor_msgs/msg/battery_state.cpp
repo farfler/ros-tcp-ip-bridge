@@ -75,7 +75,7 @@ namespace tcp_ip_bridge
 
         if (msg->cell_voltage.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->cell_voltage.data()), reinterpret_cast<const char *>(msg->cell_voltage.data() + msg->cell_voltage.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->cell_voltage.data()), reinterpret_cast<const char *>(msg->cell_voltage.data() + msg->cell_voltage.size() * sizeof(float)));
         }
 
         uint32_t cell_temperature_size = htonl(static_cast<uint32_t>(msg->cell_temperature.size()));
@@ -85,7 +85,7 @@ namespace tcp_ip_bridge
 
         if (msg->cell_temperature.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->cell_temperature.data()), reinterpret_cast<const char *>(msg->cell_temperature.data() + msg->cell_temperature.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->cell_temperature.data()), reinterpret_cast<const char *>(msg->cell_temperature.data() + msg->cell_temperature.size() * sizeof(float)));
         }
 
         uint32_t location_size = htonl(static_cast<uint32_t>(msg->location.size()));
@@ -95,7 +95,7 @@ namespace tcp_ip_bridge
 
         if (msg->location.size() > 0)
         {
-            packet.insert(packet.end(), msg->location.data(), msg->location.data() + msg->location.size());
+            packet.insert(packet.end(), msg->location.begin(), msg->location.end());
 
             RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_battery_state::serialize"), "location: %s", msg->location.c_str());
         }
@@ -107,7 +107,7 @@ namespace tcp_ip_bridge
 
         if (msg->serial_number.size() > 0)
         {
-            packet.insert(packet.end(), msg->serial_number.data(), msg->serial_number.data() + msg->serial_number.size());
+            packet.insert(packet.end(), msg->serial_number.begin(), msg->serial_number.end());
 
             RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_battery_state::serialize"), "serial_number: %s", msg->serial_number.c_str());
         }
@@ -221,8 +221,8 @@ namespace tcp_ip_bridge
         if (location_size > 0)
         {
             msg.location.resize(location_size);
-            memcpy(msg.location.data(), packet.data(), location_size * sizeof(char));
-            packet.erase(packet.begin(), packet.begin() + location_size * sizeof(char));
+            memcpy(msg.location.data(), packet.data(), location_size);
+            packet.erase(packet.begin(), packet.begin() + location_size);
         }
 
         uint32_t serial_number_size;
@@ -235,8 +235,8 @@ namespace tcp_ip_bridge
         if (serial_number_size > 0)
         {
             msg.serial_number.resize(serial_number_size);
-            memcpy(msg.serial_number.data(), packet.data(), serial_number_size * sizeof(char));
-            packet.erase(packet.begin(), packet.begin() + serial_number_size * sizeof(char));
+            memcpy(msg.serial_number.data(), packet.data(), serial_number_size);
+            packet.erase(packet.begin(), packet.begin() + serial_number_size);
         }
 
         return msg;

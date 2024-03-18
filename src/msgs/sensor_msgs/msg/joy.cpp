@@ -31,7 +31,7 @@ namespace tcp_ip_bridge
 
         if (msg->axes.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->axes.data()), reinterpret_cast<const char *>(msg->axes.data() + msg->axes.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->axes.data()), reinterpret_cast<const char *>(msg->axes.data() + msg->axes.size() * sizeof(float)));
         }
 
         uint32_t buttons_size = htonl(static_cast<uint32_t>(msg->buttons.size()));
@@ -41,7 +41,7 @@ namespace tcp_ip_bridge
 
         if (msg->buttons.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->buttons.data()), reinterpret_cast<const char *>(msg->buttons.data() + msg->buttons.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->buttons.data()), reinterpret_cast<const char *>(msg->buttons.data() + msg->buttons.size() * sizeof(int32_t)));
         }
 
         return packet;

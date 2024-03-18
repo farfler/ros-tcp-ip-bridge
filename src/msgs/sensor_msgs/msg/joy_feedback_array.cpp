@@ -27,7 +27,7 @@ namespace tcp_ip_bridge
 
         if (msg->array.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->array.data()), reinterpret_cast<const char *>(msg->array.data() + msg->array.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->array.data()), reinterpret_cast<const char *>(msg->array.data() + msg->array.size() * sizeof(sensor_msgs::msg::JoyFeedback)));
         }
 
         return packet;

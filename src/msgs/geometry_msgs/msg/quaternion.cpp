@@ -56,7 +56,7 @@ namespace tcp_ip_bridge
         RCLCPP_DEBUG(rclcpp::get_logger("geometry_msgs_msg_quaternion::deserialize"), "x: %f", msg.x);
 
         memcpy(&msg.y, packet.data(), sizeof(msg.y));
-        packet.erase(packet.begin(), packet.begin() + sizeof(msg.y);
+        packet.erase(packet.begin(), packet.begin() + sizeof(msg.y));
 
         RCLCPP_DEBUG(rclcpp::get_logger("geometry_msgs_msg_quaternion::deserialize"), "y: %f", msg.y);
 

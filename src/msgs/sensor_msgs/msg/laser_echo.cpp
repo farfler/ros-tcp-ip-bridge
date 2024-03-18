@@ -29,7 +29,7 @@ namespace tcp_ip_bridge
 
         if (msg->echoes.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->echoes.data()), reinterpret_cast<const char *>(msg->echoes.data() + msg->echoes.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->echoes.data()), reinterpret_cast<const char *>(msg->echoes.data() + msg->echoes.size() * sizeof(float)));
         }
 
         return packet;

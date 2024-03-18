@@ -24,9 +24,7 @@ namespace tcp_ip_bridge
     {
         GeometryMsgsMsgTwist::serialize(std::make_shared<geometry_msgs::msg::Twist>(msg->twist), packet);
 
-        packet.insert(packet.end(), msg->covariance.data(), msg->covariance.data() + msg->covariance.size());
-
-        RCLCPP_DEBUG(rclcpp::get_logger("geometry_msgs_msg_twist_with_covariance::serialize"), "covariance: %f", msg->covariance[0]);
+        packet.insert(packet.end(), reinterpret_cast<const char *>(msg->covariance.data()), reinterpret_cast<const char *>(msg->covariance.data() + msg->covariance.size() * sizeof(double)));
 
         return packet;
     }
@@ -46,8 +44,6 @@ namespace tcp_ip_bridge
 
         memcpy(msg.covariance.data(), packet.data(), msg.covariance.size() * sizeof(double));
         packet.erase(packet.begin(), packet.begin() + msg.covariance.size() * sizeof(double));
-
-        RCLCPP_DEBUG(rclcpp::get_logger("geometry_msgs_msg_twist_with_covariance::deserialize"), "covariance: %f", msg.covariance[0]);
 
         return msg;
     }

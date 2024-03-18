@@ -4,6 +4,7 @@
 
 #include "rclcpp/rclcpp.hpp"             // RCLCPP_DEBUG
 #include "geometry_msgs/msg/polygon.hpp" // geometry_msgs::msg::Polygon
+#include "geometry_msgs/msg/point.hpp"   // geometry_msgs::msg::Point
 
 #include "tcp_ip_bridge/msgs/geometry_msgs/msg/polygon.hpp" // GeometryMsgsMsgPolygon
 
@@ -29,7 +30,7 @@ namespace tcp_ip_bridge
 
         if (msg->points.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->points.data()), reinterpret_cast<const char *>(msg->points.data() + msg->points.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->points.data()), reinterpret_cast<const char *>(msg->points.data() + msg->points.size() * sizeof(geometry_msgs::msg::Point)));
         }
 
         return packet;
@@ -56,8 +57,8 @@ namespace tcp_ip_bridge
         if (points_size > 0)
         {
             msg.points.resize(points_size);
-            memcpy(msg.points.data(), packet.data(), points_size);
-            packet.erase(packet.begin(), packet.begin() + points_size);
+            memcpy(msg.points.data(), packet.data(), points_size * sizeof(geometry_msgs::msg::Point));
+            packet.erase(packet.begin(), packet.begin() + points_size * sizeof(geometry_msgs::msg::Point));
         }
 
         return msg;

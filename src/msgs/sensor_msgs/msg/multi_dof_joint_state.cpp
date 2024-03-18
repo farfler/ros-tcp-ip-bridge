@@ -38,7 +38,7 @@ namespace tcp_ip_bridge
 
                 RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_multi_dof_joint_state::serialize"), "joint_name_size: %u", ntohl(joint_name_size));
 
-                packet.insert(packet.end(), reinterpret_cast<const char *>(joint_name.data()), reinterpret_cast<const char *>(joint_name.data() + joint_name.size()));
+                packet.insert(packet.end(), joint_name.begin(), joint_name.end());
 
                 RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_multi_dof_joint_state::serialize"), "joint_name: %s", joint_name.c_str());
             }
@@ -51,7 +51,7 @@ namespace tcp_ip_bridge
 
         if (msg->transforms.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->transforms.data()), reinterpret_cast<const char *>(msg->transforms.data() + msg->transforms.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->transforms.data()), reinterpret_cast<const char *>(msg->transforms.data() + msg->transforms.size() * sizeof(geometry_msgs::msg::Transform)));
         }
 
         uint32_t twist_size = htonl(static_cast<uint32_t>(msg->twist.size()));
@@ -61,7 +61,7 @@ namespace tcp_ip_bridge
 
         if (msg->twist.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->twist.data()), reinterpret_cast<const char *>(msg->twist.data() + msg->twist.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->twist.data()), reinterpret_cast<const char *>(msg->twist.data() + msg->twist.size() * sizeof(geometry_msgs::msg::Twist)));
         }
 
         uint32_t wrench_size = htonl(static_cast<uint32_t>(msg->wrench.size()));
@@ -71,7 +71,7 @@ namespace tcp_ip_bridge
 
         if (msg->wrench.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->wrench.data()), reinterpret_cast<const char *>(msg->wrench.data() + msg->wrench.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->wrench.data()), reinterpret_cast<const char *>(msg->wrench.data() + msg->wrench.size() * sizeof(geometry_msgs::msg::Wrench)));
         }
 
         return packet;

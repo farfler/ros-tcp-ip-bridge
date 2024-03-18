@@ -27,11 +27,11 @@ namespace tcp_ip_bridge
         uint32_t frame_id_size = htonl(static_cast<uint32_t>(msg->frame_id.size()));
         packet.insert(packet.end(), reinterpret_cast<const char *>(&frame_id_size), reinterpret_cast<const char *>(&frame_id_size) + sizeof(frame_id_size));
 
-        RCLCPP_DEBUG(rclcpp::get_logger("std_msgs_msg_header::serialize"), "frame_id_size: %d", ntohl(frame_id_size));
+        RCLCPP_DEBUG(rclcpp::get_logger("std_msgs_msg_header::serialize"), "frame_id_size: %u", ntohl(frame_id_size));
 
         if (msg->frame_id.size() > 0)
         {
-            packet.insert(packet.end(), msg->frame_id.data(), msg->frame_id.data() + msg->frame_id.size());
+            packet.insert(packet.end(), msg->frame_id.begin(), msg->frame_id.end());
 
             RCLCPP_DEBUG(rclcpp::get_logger("std_msgs_msg_header::serialize"), "frame_id: %s", msg->frame_id.c_str());
         }
@@ -62,8 +62,8 @@ namespace tcp_ip_bridge
         if (frame_id_size > 0)
         {
             msg.frame_id.resize(frame_id_size);
-            memcpy(msg.frame_id.data(), packet.data(), frame_id_size * sizeof(char));
-            packet.erase(packet.begin(), packet.begin() + frame_id_size * sizeof(char));
+            memcpy(msg.frame_id.data(), packet.data(), frame_id_size);
+            packet.erase(packet.begin(), packet.begin() + frame_id_size);
 
             RCLCPP_DEBUG(rclcpp::get_logger("std_msgs_msg_header::deserialize"), "frame_id: %s", msg.frame_id.c_str());
         }

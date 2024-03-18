@@ -34,7 +34,7 @@ namespace tcp_ip_bridge
 
         if (msg->source.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->source.data()), reinterpret_cast<const char *>(msg->source.data() + msg->source.size()));
+            packet.insert(packet.end(), msg->source.begin(), msg->source.end());
 
             RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_time_reference::serialize"), "source: %s", msg->source.c_str());
         }
@@ -67,8 +67,8 @@ namespace tcp_ip_bridge
         if (source_size > 0)
         {
             msg.source.resize(source_size);
-            memcpy(msg.source.data(), packet.data(), source_size * sizeof(char));
-            packet.erase(packet.begin(), packet.begin() + source_size * sizeof(char));
+            memcpy(msg.source.data(), packet.data(), source_size);
+            packet.erase(packet.begin(), packet.begin() + source_size);
 
             RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_time_reference::deserialize"), "source: %s", msg.source.c_str());
         }

@@ -31,7 +31,17 @@ namespace tcp_ip_bridge
 
         if (msg->name.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->name.data()), reinterpret_cast<const char *>(msg->name.data() + msg->name.size()));
+            for (auto &name : msg->name)
+            {
+                uint32_t name_size = htonl(static_cast<uint32_t>(name.size()));
+                packet.insert(packet.end(), reinterpret_cast<const char *>(&name_size), reinterpret_cast<const char *>(&name_size) + sizeof(name_size));
+
+                RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_joint_state::serialize"), "name_size: %u", ntohl(name_size));
+
+                packet.insert(packet.end(), name.begin(), name.end());
+
+                RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_joint_state::serialize"), "name: %s", name.c_str());
+            }
         }
 
         uint32_t position_size = htonl(static_cast<uint32_t>(msg->position.size()));
@@ -41,7 +51,7 @@ namespace tcp_ip_bridge
 
         if (msg->position.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->position.data()), reinterpret_cast<const char *>(msg->position.data() + msg->position.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->position.data()), reinterpret_cast<const char *>(msg->position.data() + msg->position.size() * sizeof(double)));
         }
 
         uint32_t velocity_size = htonl(static_cast<uint32_t>(msg->velocity.size()));
@@ -51,7 +61,7 @@ namespace tcp_ip_bridge
 
         if (msg->velocity.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->velocity.data()), reinterpret_cast<const char *>(msg->velocity.data() + msg->velocity.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->velocity.data()), reinterpret_cast<const char *>(msg->velocity.data() + msg->velocity.size() * sizeof(double)));
         }
 
         uint32_t effort_size = htonl(static_cast<uint32_t>(msg->effort.size()));
@@ -61,7 +71,7 @@ namespace tcp_ip_bridge
 
         if (msg->effort.size() > 0)
         {
-            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->effort.data()), reinterpret_cast<const char *>(msg->effort.data() + msg->effort.size()));
+            packet.insert(packet.end(), reinterpret_cast<const char *>(msg->effort.data()), reinterpret_cast<const char *>(msg->effort.data() + msg->effort.size() * sizeof(double)));
         }
 
         return packet;
@@ -90,8 +100,21 @@ namespace tcp_ip_bridge
         if (name_size > 0)
         {
             msg.name.resize(name_size);
-            memcpy(msg.name.data(), packet.data(), name_size * sizeof(char));
-            packet.erase(packet.begin(), packet.begin() + name_size * sizeof(char));
+            for (auto &name : msg.name)
+            {
+                uint32_t name_size;
+                memcpy(&name_size, packet.data(), sizeof(name_size));
+                packet.erase(packet.begin(), packet.begin() + sizeof(name_size));
+                name_size = ntohl(name_size);
+
+                RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_joint_state::deserialize"), "name_size: %u", name_size);
+
+                name.resize(name_size);
+                memcpy(name.data(), packet.data(), name_size);
+                packet.erase(packet.begin(), packet.begin() + name_size);
+
+                RCLCPP_DEBUG(rclcpp::get_logger("sensor_msgs_msg_joint_state::deserialize"), "name: %s", name.c_str());
+            }
         }
 
         uint32_t position_size;
