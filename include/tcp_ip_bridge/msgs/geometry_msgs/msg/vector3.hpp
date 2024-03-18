@@ -1,3 +1,6 @@
+#ifndef TCP_IP_BRIDGE__MSGS__GEOMETRY_MSGS__MSG__VECTOR3_HPP_
+#define TCP_IP_BRIDGE__MSGS__GEOMETRY_MSGS__MSG__VECTOR3_HPP_
+
 #include <vector> // std::vector
 
 #include "geometry_msgs/msg/vector3.hpp" // geometry_msgs::msg::Vector3
@@ -15,3 +18,5 @@ namespace tcp_ip_bridge
     };
 
 } // namespace tcp_ip_bridge
+
+#endif // TCP_IP_BRIDGE__MSGS__GEOMETRY_MSGS__MSG__VECTOR3_HPP_

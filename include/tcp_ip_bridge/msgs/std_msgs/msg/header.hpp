@@ -1,3 +1,6 @@
+#ifndef TCP_IP_BRIDGE__MSGS__STD_MSGS__MSG__HEADER_HPP_
+#define TCP_IP_BRIDGE__MSGS__STD_MSGS__MSG__HEADER_HPP_
+
 #include <vector> // std::vector
 
 #include "std_msgs/msg/header.hpp" // std_msgs::msg::Header
@@ -15,3 +18,5 @@ namespace tcp_ip_bridge
     };
 
 } // namespace tcp_ip_bridge
+
+#endif // TCP_IP_BRIDGE__MSGS__STD_MSGS__MSG__HEADER_HPP_

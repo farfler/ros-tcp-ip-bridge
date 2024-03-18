@@ -1,3 +1,6 @@
+#ifndef TCP_IP_BRIDGE__MSGS__GEOMETRY_MSGS__MSG__QUATERNION_HPP_
+#define TCP_IP_BRIDGE__MSGS__GEOMETRY_MSGS__MSG__QUATERNION_HPP_
+
 #include <vector> // std::vector
 
 #include "geometry_msgs/msg/quaternion.hpp" // geometry_msgs::msg::Quaternion
@@ -15,3 +18,5 @@ namespace tcp_ip_bridge
     };
 
 } // namespace tcp_ip_bridge
+
+#endif // TCP_IP_BRIDGE__MSGS__GEOMETRY_MSGS__MSG__QUATERNION_HPP_

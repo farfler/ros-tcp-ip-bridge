@@ -1,3 +1,6 @@
+#ifndef TCP_IP_BRIDGE__MSGS__GEOMETRY_MSGS__MSG__POINT_HPP_
+#define TCP_IP_BRIDGE__MSGS__GEOMETRY_MSGS__MSG__POINT_HPP_
+
 #include <vector> // std::vector
 
 #include "geometry_msgs/msg/point.hpp" // geometry_msgs::msg::Point
@@ -15,3 +18,5 @@ namespace tcp_ip_bridge
     };
 
 } // namespace tcp_ip_bridge
+
+#endif // TCP_IP_BRIDGE__MSGS__GEOMETRY_MSGS__MSG__POINT_HPP_

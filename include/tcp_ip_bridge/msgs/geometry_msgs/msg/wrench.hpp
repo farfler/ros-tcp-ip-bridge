@@ -1,3 +1,6 @@
+#ifndef TCP_IP_BRIDGE__MSGS__GEOMETRY_MSGS__MSG__WRENCH_HPP_
+#define TCP_IP_BRIDGE__MSGS__GEOMETRY_MSGS__MSG__WRENCH_HPP_
+
 #include <vector> // std::vector
 
 #include "geometry_msgs/msg/wrench.hpp" // geometry_msgs::msg::Wrench
@@ -15,3 +18,5 @@ namespace tcp_ip_bridge
     };
 
 } // namespace tcp_ip_bridge
+
+#endif // TCP_IP_BRIDGE__MSGS__GEOMETRY_MSGS__MSG__WRENCH_HPP_

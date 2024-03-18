@@ -1,3 +1,6 @@
+#ifndef TCP_IP_BRIDGE__MSGS__SENSOR_MSGS__MSG__NAV_SAT_STATUS_HPP_
+#define TCP_IP_BRIDGE__MSGS__SENSOR_MSGS__MSG__NAV_SAT_STATUS_HPP_
+
 #include <vector> // std::vector
 
 #include "sensor_msgs/msg/nav_sat_status.hpp" // sensor_msgs::msg::NavSatStatus
@@ -15,3 +18,5 @@ namespace tcp_ip_bridge
     };
 
 } // namespace tcp_ip_bridge
+
+#endif // TCP_IP_BRIDGE__MSGS__SENSOR_MSGS__MSG__NAV_SAT_STATUS_HPP_

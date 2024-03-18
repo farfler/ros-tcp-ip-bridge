@@ -1,3 +1,6 @@
+#ifndef TCP_IP_BRIDGE__MSGS__BUILTIN_INTERFACES__MSG__TIME_HPP_
+#define TCP_IP_BRIDGE__MSGS__BUILTIN_INTERFACES__MSG__TIME_HPP_
+
 #include <vector> // std::vector
 
 #include "builtin_interfaces/msg/time.hpp" // builtin_interfaces::msg::Time
@@ -15,3 +18,5 @@ namespace tcp_ip_bridge
     };
 
 } // namespace tcp_ip_bridge
+
+#endif // TCP_IP_BRIDGE__MSGS__BUILTIN_INTERFACES__MSG__TIME_HPP_

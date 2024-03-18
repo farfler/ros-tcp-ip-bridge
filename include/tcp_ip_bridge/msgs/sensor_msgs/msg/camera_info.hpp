@@ -1,3 +1,6 @@
+#ifndef TCP_IP_BRIDGE__MSGS__SENSOR_MSGS__MSG__CAMERA_INFO_HPP_
+#define TCP_IP_BRIDGE__MSGS__SENSOR_MSGS__MSG__CAMERA_INFO_HPP_
+
 #include <vector> // std::vector
 
 #include "sensor_msgs/msg/camera_info.hpp" // sensor_msgs::msg::CameraInfo
@@ -15,3 +18,5 @@ namespace tcp_ip_bridge
     };
 
 } // namespace tcp_ip_bridge
+
+#endif // TCP_IP_BRIDGE__MSGS__SENSOR_MSGS__MSG__CAMERA_INFO_HPP_
